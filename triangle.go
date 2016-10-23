@@ -70,3 +70,21 @@ func (t *Triangle) IsWithin(r *Range) bool {
 	}
 	return false
 }
+
+func sign(a, b, c *Point) float64 {
+	return (a.X - c.X) * (b.Y - c.Y) - (b.X - c.X) * (a.Y - c.Y)
+}
+
+func (t *Triangle) ContainsPoint(p *Point) bool {
+	b1 := sign(p, t.A, t.B) < 0
+	b2 := sign(p, t.B, t.C) < 0
+	b3 := sign(p, t.C, t.A) < 0
+	return (b1 == b2) && (b2 == b3)
+}
+
+func (t *Triangle) ContainsRange(r *Range) bool {
+	return t.ContainsPoint(NewPoint(r.X0, r.Y0)) &&
+		t.ContainsPoint(NewPoint(r.X1, r.Y0)) &&
+		t.ContainsPoint(NewPoint(r.X0, r.Y1)) &&
+		t.ContainsPoint(NewPoint(r.X1, r.Y1))
+}

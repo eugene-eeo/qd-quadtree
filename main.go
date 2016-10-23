@@ -33,6 +33,8 @@ func main() {
 	bigBound := NewRange(0, 8, 0, 5)
 	quadtree := NewNode(bigBound, 1)
 	quadtree.AddTriangles(mesh)
-	quadtree.Partition(1, 3)
+	quadtree.Partition(1, 10)
 	printTree(quadtree)
+	t, ok := quadtree.FindTriangle(NewPoint(4, 4))
+	fmt.Println(ok, t == mesh[1])
 }

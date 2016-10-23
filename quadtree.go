@@ -13,7 +13,7 @@ func NewNode(r *Range, depth int) *Node {
 
 func (n *Node) AddTriangles(t []*Triangle) {
 	for _, triangle := range t {
-		if triangle.IsWithin(n.Bound) {
+		if triangle.IsWithin(n.Bound) || triangle.ContainsRange(n.Bound) {
 			n.Triangles = append(n.Triangles, triangle)
 		}
 	}
@@ -31,11 +31,12 @@ func (n *Node) Split() {
 	XM := midpoint(X0, X1)
 	YM := midpoint(Y0, Y1)
 	next_depth := n.Depth + 1
-	n.Children = make([]*Node, 4)
-	n.Children[0] = NewNode(NewRange(X0, XM, Y0, YM), next_depth)
-	n.Children[1] = NewNode(NewRange(XM, X1, Y0, YM), next_depth)
-	n.Children[3] = NewNode(NewRange(X0, XM, YM, Y1), next_depth)
-	n.Children[2] = NewNode(NewRange(XM, X1, YM, Y1), next_depth)
+	n.Children = []*Node{
+		NewNode(NewRange(X0, XM, Y0, YM), next_depth),
+		NewNode(NewRange(XM, X1, Y0, YM), next_depth),
+		NewNode(NewRange(X0, XM, YM, Y1), next_depth),
+		NewNode(NewRange(XM, X1, YM, Y1), next_depth),
+	}
 	for _, node := range n.Children {
 		node.AddTriangles(n.Triangles)
 	}
@@ -59,6 +60,19 @@ func (node *Node) FindNode(p *Point) (*Node, bool) {
 		}
 	}
 	return node, true
+}
+
+func (node *Node) FindTriangle(p *Point) (*Triangle, bool) {
+	node, ok := node.FindNode(p)
+	if !ok {
+		return nil, false
+	}
+	for _, triangle := range node.Triangles {
+		if triangle.ContainsPoint(p) {
+			return triangle, true
+		}
+	}
+	return nil, false
 }
 
 func (node *Node) Partition(q int, d int) {
