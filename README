@@ -11,15 +11,10 @@
 
     procedure:
 
-     - generate a 2D mesh filled with a random number of triangles.
+     - find a `real life` 2D mesh.
      - run the quadtree generation routine with desired qd factors
        and record total number of nodes in the tree.
      - record total time taken to test 10000 random points within
        the mesh.
      - generate nice graphs.
-
-    worries:
-
-     - algorithm is topology sensitive, need to take test points and
-       mesh vertices from the same distributions.
 
