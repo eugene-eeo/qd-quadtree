@@ -8,6 +8,7 @@ import (
 )
 
 func countNodes(node *Node, count int) int {
+	count++
 	for _, child := range node.Children {
 		count = countNodes(child, count)
 		count++
