@@ -36,6 +36,6 @@ func main() {
 		quadtree := NewNode(r, 1)
 		quadtree.Triangles = mesh
 		quadtree.Partition(q, 10)
-		fmt.Println(countNodes(quadtree, 0))
+		fmt.Printf("q=%d d=%d nodes=%d\n", q, 10, countNodes(quadtree, 0))
 	}
 }
