@@ -11,7 +11,7 @@
 
     procedure:
 
-     - find a `real life` 2D mesh.
+     - generate 2D meshes.
      - run the quadtree generation routine with desired qd factors
        and record total number of nodes in the tree.
      - record total time taken to test 10000 random points within

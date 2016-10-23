@@ -1,40 +1,41 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
-	"strings"
+	"bufio"
+	"os"
 )
 
-func printTree(qd *Node) {
-	fmt.Println(strings.Repeat(" ", qd.Depth-1), qd.Depth, qd.Bound, len(qd.Triangles))
-	for _, n := range qd.Children {
-		printTree(n)
+func countNodes(node *Node, count int) int {
+	for _, child := range node.Children {
+		count = countNodes(child, count)
+		count++
 	}
+	return count
 }
 
 func main() {
-	mesh := []*Triangle{
-		NewTriangleFromPoints(
-			NewPoint(0, 1),
-			NewPoint(3, 0),
-			NewPoint(3, 5),
-		),
-		NewTriangleFromPoints(
-			NewPoint(6, 5),
-			NewPoint(3, 0),
-			NewPoint(3, 5),
-		),
-		NewTriangleFromPoints(
-			NewPoint(6, 5),
-			NewPoint(3, 0),
-			NewPoint(8, 3),
-		),
+	mesh := []*Triangle{}
+	source := bufio.NewScanner(os.Stdin)
+	points := [3][2]float64{}
+	for source.Scan() {
+		err := json.Unmarshal(source.Bytes(), &points)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		mesh = append(mesh, NewTriangleFromPoints(
+			NewPoint(points[0][0], points[0][1]),
+			NewPoint(points[1][0], points[1][1]),
+			NewPoint(points[2][0], points[2][1]),
+		))
 	}
-	bigBound := NewRange(0, 8, 0, 5)
-	quadtree := NewNode(bigBound, 1)
-	quadtree.AddTriangles(mesh)
-	quadtree.Partition(1, 10)
-	printTree(quadtree)
-	t, ok := quadtree.FindTriangle(NewPoint(4, 4))
-	fmt.Println(ok, t == mesh[1])
+	r := NewRangeFromMesh(mesh)
+	for _, q := range []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13} {
+		quadtree := NewNode(r, 1)
+		quadtree.Triangles = mesh
+		quadtree.Partition(q, 10)
+		fmt.Println(countNodes(quadtree, 0))
+	}
 }
