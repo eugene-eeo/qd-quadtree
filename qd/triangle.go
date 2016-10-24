@@ -37,8 +37,8 @@ func (l *SlopedLine) XToY(x float64) float64 {
 
 func (l *SlopedLine) WithinRange(r *Range) bool {
 	return within(l.XToY(r.X0), r.Y0, r.Y1) ||
-		within(l.XToY(r.X1), r.Y0, r.Y1) ||
 		within(l.YToX(r.Y0), r.X0, r.X1) ||
+		within(l.XToY(r.X1), r.Y0, r.Y1) ||
 		within(l.YToX(r.Y1), r.X0, r.X1)
 }
 

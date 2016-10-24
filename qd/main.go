@@ -33,10 +33,12 @@ func main() {
 		))
 	}
 	r := NewRangeFromMesh(mesh)
-	for _, q := range []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13} {
-		quadtree := NewNode(r, 1)
-		quadtree.Triangles = mesh
-		quadtree.Partition(q, 10)
-		fmt.Printf("q=%d d=%d nodes=%d\n", q, 10, countNodes(quadtree, 0))
+	for _, d := range []int{5, 10, 15} {
+		for _, q := range []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13} {
+			quadtree := NewNode(r, 1)
+			quadtree.Triangles = mesh
+			quadtree.Partition(q, d)
+			fmt.Printf("q=%d d=%d nodes=%d\n", q, d, countNodes(quadtree, 0))
+		}
 	}
 }

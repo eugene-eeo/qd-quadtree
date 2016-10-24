@@ -24,7 +24,7 @@ func NewRange(x0, x1, y0, y1 float64) *Range {
 	return &Range{x0, x1, y0, y1}
 }
 
-func min(a float64, xs... float64) float64 {
+func min(a float64, xs []float64) float64 {
 	min := a
 	for _, v := range xs {
 		if v < min {
@@ -34,7 +34,7 @@ func min(a float64, xs... float64) float64 {
 	return min
 }
 
-func max(a float64, xs... float64) float64 {
+func max(a float64, xs []float64) float64 {
 	max := a
 	for _, v := range xs {
 		if v > max {
@@ -52,10 +52,10 @@ func NewRangeFromMesh(mesh []*Triangle) *Range {
 	for _, t := range mesh {
 		X := []float64{t.A.X, t.B.X, t.C.X}
 		Y := []float64{t.A.Y, t.B.Y, t.C.Y}
-		minX = min(minX, X...)
-		maxX = max(maxX, X...)
-		minY = min(minY, Y...)
-		maxY = max(maxY, Y...)
+		minX = min(minX, X)
+		maxX = max(maxX, X)
+		minY = min(minY, Y)
+		maxY = max(maxY, Y)
 	}
 	return NewRange(minX, maxX, minY, maxY)
 }
