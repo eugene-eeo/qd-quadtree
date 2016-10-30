@@ -1,10 +1,15 @@
 build:
 	cd qd && go test && go build
 
-run: build
+compute:
 	cat points.json | qd/qd > data
+
+plot:
 	cat data | ./plot.py
 
+run: build compute plot
+
 install:
-	pip install -R requirements.txt
+	pip install -r requirements.txt
+	go get -u github.com/paulmach/go.geo
 	./genpoints.py > points.json

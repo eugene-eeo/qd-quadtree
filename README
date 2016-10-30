@@ -9,12 +9,20 @@
      - q => how many triangles in each subregion.
      - d => maximum quadtree depth.
 
-    procedure:
+    usage
+    -----
 
-     - generate 2D meshes.
+        # first time
+        $ make install
+        $ make run
+        $ open results.pdf
+
+    what it does
+    ------------
+
+     - generate 2D mesh.
      - run the quadtree generation routine with desired qd factors
        and record total number of nodes in the tree.
-     - record total time taken to test 10000 random points within
-       the mesh.
+     - record total no. of triangles scanned to locate 2000 points.
      - generate nice graphs.
 
