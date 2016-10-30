@@ -18,7 +18,3 @@
        the mesh.
      - generate nice graphs.
 
-    todo:
-
-     - work with one big array and indices instead of storing the
-       floats directly.
