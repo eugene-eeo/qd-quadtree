@@ -1,65 +1,20 @@
 package main
 
+import "github.com/paulmach/go.geo"
+import "math"
+
 func midpoint(a, b float64) float64 {
 	return (a + b) / 2.0
 }
 
-func within(x, start, end float64) bool {
-	return x >= start && x <= end
-}
-
-type Point struct {
-	X, Y float64
-}
-
-func NewPoint(x, y float64) *Point {
-	return &Point{X: x, Y: y}
-}
-
-type Range struct {
-	X0, X1, Y0, Y1 float64
-}
-
-func NewRange(x0, x1, y0, y1 float64) *Range {
-	return &Range{x0, x1, y0, y1}
-}
-
-func min(a float64, xs []float64) float64 {
-	min := a
-	for _, v := range xs {
-		if v < min {
-			min = v
-		}
+func BoundFromPoints(xs []*geo.Point) *geo.Bound {
+	min_x := xs[0].X(); min_y := xs[0].Y();
+	max_x := xs[0].X(); max_y := xs[0].Y();
+	for _, p := range xs[1:] {
+		min_x = math.Min(min_x, p.X());
+		min_y = math.Min(min_y, p.Y());
+		max_x = math.Max(max_x, p.X());
+		max_y = math.Max(max_y, p.Y());
 	}
-	return min
-}
-
-func max(a float64, xs []float64) float64 {
-	max := a
-	for _, v := range xs {
-		if v > max {
-			max = v
-		}
-	}
-	return max
-}
-
-func NewRangeFromMesh(mesh []*Triangle) *Range {
-	minX := mesh[0].A.X
-	maxX := mesh[0].A.X
-	minY := mesh[0].A.Y
-	maxY := mesh[0].A.Y
-	for _, t := range mesh {
-		X := []float64{t.A.X, t.B.X, t.C.X}
-		Y := []float64{t.A.Y, t.B.Y, t.C.Y}
-		minX = min(minX, X)
-		maxX = max(maxX, X)
-		minY = min(minY, Y)
-		maxY = max(maxY, Y)
-	}
-	return NewRange(minX, maxX, minY, maxY)
-}
-
-func (r *Range) Contains(p *Point) bool {
-	return within(p.X, r.X0, r.X1) && within(p.Y, r.Y0, r.Y1)
+	return geo.NewBound(min_x, max_x, min_y, max_y)
 }

@@ -3,8 +3,8 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"bufio"
 	"os"
+	"github.com/paulmach/go.geo"
 )
 
 func countNodes(node *Node, count int) int {
@@ -16,26 +16,31 @@ func countNodes(node *Node, count int) int {
 	return count
 }
 
+type JSONData struct {
+	Points    []*geo.Point
+	Simplices [][3]int
+}
+
 func main() {
+	ctx := new(JSONData)
 	mesh := []*Triangle{}
-	source := bufio.NewScanner(os.Stdin)
-	points := [3][2]float64{}
-	for source.Scan() {
-		err := json.Unmarshal(source.Bytes(), &points)
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
+	source := json.NewDecoder(os.Stdin)
+	if err := source.Decode(&ctx); err != nil {
+		panic(err)
+	}
+
+	for _, idxs := range ctx.Simplices {
 		mesh = append(mesh, NewTriangleFromPoints(
-			NewPoint(points[0][0], points[0][1]),
-			NewPoint(points[1][0], points[1][1]),
-			NewPoint(points[2][0], points[2][1]),
+			ctx.Points[idxs[0]],
+			ctx.Points[idxs[1]],
+			ctx.Points[idxs[2]],
 		))
 	}
-	r := NewRangeFromMesh(mesh)
+
+	b := BoundFromPoints(ctx.Points)
 	for _, d := range []int{5, 10, 15} {
 		for _, q := range []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13} {
-			quadtree := NewNode(r, 1)
+			quadtree := NewNode(b, 1)
 			quadtree.Triangles = mesh
 			quadtree.Partition(q, d)
 			fmt.Printf("q=%d d=%d nodes=%d\n", q, d, countNodes(quadtree, 0))

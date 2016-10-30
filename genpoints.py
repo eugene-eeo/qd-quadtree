@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import sys
 import numpy as np
 from scipy.spatial import Delaunay
@@ -9,9 +10,10 @@ def main():
     # take points ~ N(0, 2.5^2)
     points = 2.5 * np.random.randn(n, 2)
     triangulation = Delaunay(points)
-    for point in points[triangulation.simplices]:
-        [a, b, c] = point
-        print(dumps([list(k) for k in [a, b, c]]))
+    print(dumps({
+        "points": points.tolist(),
+        "simplices": triangulation.simplices.tolist(),
+    }))
 
 
 if __name__ == '__main__':

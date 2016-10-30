@@ -1,14 +1,16 @@
 package main
 
+import "github.com/paulmach/go.geo"
+
 type Node struct {
 	Triangles []*Triangle
 	Children  []*Node
-	Bound     *Range
+	Bound     *geo.Bound
 	Depth     int
 }
 
-func NewNode(r *Range, depth int) *Node {
-	return &Node{Bound: r, Depth: depth}
+func NewNode(b *geo.Bound, depth int) *Node {
+	return &Node{Bound: b, Depth: depth}
 }
 
 func (n *Node) AddTriangles(t []*Triangle) {
@@ -19,30 +21,30 @@ func (n *Node) AddTriangles(t []*Triangle) {
 	}
 }
 
-func (n *Node) Contains(p *Point) bool {
+func (n *Node) Contains(p *geo.Point) bool {
 	return n.Bound.Contains(p)
 }
 
 func (n *Node) Split() {
-	X0 := n.Bound.X0
-	X1 := n.Bound.X1
-	Y0 := n.Bound.Y0
-	Y1 := n.Bound.Y1
+	X0 := n.Bound.West()
+	X1 := n.Bound.East()
+	Y0 := n.Bound.South()
+	Y1 := n.Bound.North()
 	XM := midpoint(X0, X1)
 	YM := midpoint(Y0, Y1)
 	next_depth := n.Depth + 1
 	n.Children = []*Node{
-		NewNode(NewRange(X0, XM, Y0, YM), next_depth),
-		NewNode(NewRange(XM, X1, Y0, YM), next_depth),
-		NewNode(NewRange(X0, XM, YM, Y1), next_depth),
-		NewNode(NewRange(XM, X1, YM, Y1), next_depth),
+		NewNode(geo.NewBound(X0, XM, Y0, YM), next_depth),
+		NewNode(geo.NewBound(XM, X1, Y0, YM), next_depth),
+		NewNode(geo.NewBound(X0, XM, YM, Y1), next_depth),
+		NewNode(geo.NewBound(XM, X1, YM, Y1), next_depth),
 	}
 	for _, node := range n.Children {
 		node.AddTriangles(n.Triangles)
 	}
 }
 
-func (node *Node) FindNode(p *Point) (*Node, bool) {
+func (node *Node) FindNode(p *geo.Point) (*Node, bool) {
 	if !node.Contains(p) {
 		return nil, false
 	}
@@ -62,7 +64,7 @@ func (node *Node) FindNode(p *Point) (*Node, bool) {
 	return node, true
 }
 
-func (node *Node) FindTriangle(p *Point) (*Triangle, bool) {
+func (node *Node) FindTriangle(p *geo.Point) (*Triangle, bool) {
 	node, ok := node.FindNode(p)
 	if !ok {
 		return nil, false
