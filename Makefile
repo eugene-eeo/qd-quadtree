@@ -1,5 +1,5 @@
 build:
-	cd qd && go build
+	cd qd && go test && go build
 
 run: build
 	cat points.json | qd/qd > data
