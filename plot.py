@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import sys
 import matplotlib.pyplot as plt
+from matplotlib.patches import Patch
 from matplotlib.backends.backend_pdf import PdfPages
 from collections import defaultdict
 
@@ -26,13 +27,15 @@ def main():
             T = [a for _, a in m[q].values()]
             fig, ax1 = plt.subplots()
             fig.suptitle('$ q=%d $' % q)
-            ax1.plot(d, N, 'b')
             ax1.set_xlabel('$ d $')
-            ax1.set_ylabel('nodes')
+            ax1.set_ylabel('total nodes')
+            ax1.plot(d, N, 'black')
 
             ax2 = ax1.twinx()
             ax2.plot(d, T, 'g')
             ax2.set_ylabel('total scanned')
+            for tl in ax2.get_yticklabels():
+                tl.set_color('g')
 
             plt.grid(True)
             pdf.savefig()
