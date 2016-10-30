@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 import sys
 import matplotlib.pyplot as plt
-from matplotlib.patches import Patch
 from matplotlib.backends.backend_pdf import PdfPages
 from collections import defaultdict
 

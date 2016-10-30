@@ -23,8 +23,8 @@ func testMain(t *testing.T) {
 	q.Partition(1, 3)
 
 	for i := 0; i < 2000; i++ {
-		x := 3*rand.Float64()
-		y := 5*rand.Float64()
+		x := 3 * rand.Float64()
+		y := 5 * rand.Float64()
 		p := &geo.Point{x, y}
 		var tc *Triangle = nil
 		for _, tr := range triangles {

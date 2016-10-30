@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/paulmach/go.geo"
-	"os"
 	"math/rand"
+	"os"
 )
 
 func countNodes(node *Node, count int) int {
