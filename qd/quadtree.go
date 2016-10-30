@@ -67,17 +67,19 @@ func (node *Node) FindNode(p *geo.Point) (*Node, bool) {
 	return node, true
 }
 
-func (node *Node) FindTriangle(p *geo.Point) (*Triangle, bool) {
+func (node *Node) FindTriangle(p *geo.Point) (*Triangle, int, bool) {
 	node, ok := node.FindNode(p)
 	if !ok {
-		return nil, false
+		return nil, 0, false
 	}
+	scanned := 0
 	for _, triangle := range node.Triangles {
+		scanned++
 		if triangle.ContainsPoint(p) {
-			return triangle, true
+			return triangle, scanned, true
 		}
 	}
-	return nil, false
+	return nil, scanned, false
 }
 
 func (node *Node) Partition(q int, d int) {

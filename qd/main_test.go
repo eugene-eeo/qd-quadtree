@@ -33,7 +33,7 @@ func testMain(t *testing.T) {
 				break
 			}
 		}
-		found, ok := q.FindTriangle(p)
+		found, _, ok := q.FindTriangle(p)
 		if tc != nil && !ok {
 			t.Error("expected triangle to be found")
 		}

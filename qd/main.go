@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/paulmach/go.geo"
 	"os"
+	"math/rand"
 )
 
 func countNodes(node *Node, count int) int {
@@ -38,15 +39,26 @@ func main() {
 	}
 
 	b := BoundFromPoints(ctx.Points)
+	x0 := b.West()
+	dx := b.East() - x0
+	y0 := b.South()
+	dy := b.North() - y0
+
 	for _, q := range []int{128, 64, 32, 16, 8, 4, 2, 1} {
 		quadtree := NewNode(b, 1)
 		quadtree.Triangles = mesh
 		for _, d := range []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15} {
 			quadtree.Partition(q, d)
-			fmt.Printf("q=%d d=%d nodes=%d\n", q, d, countNodes(quadtree, 0))
+			scanned := 0
+			for i := 0; i < 2000; i++ {
+				p := &geo.Point{
+					dx*rand.Float64() + x0,
+					dy*rand.Float64() + y0,
+				}
+				_, s, _ := quadtree.FindTriangle(p)
+				scanned += s
+			}
+			fmt.Printf("q=%d d=%d nodes=%d scanned=%d\n", q, d, countNodes(quadtree, 0), scanned)
 		}
 	}
 }
-
-/*
-*/

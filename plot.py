@@ -17,18 +17,23 @@ def line_parser(lines):
 def main():
     m = defaultdict(dict)
     for entry in line_parser(sys.stdin):
-        m[entry['q']][entry['d']] = entry['nodes']
+        m[entry['q']][entry['d']] = (entry['nodes'], entry['scanned'])
 
     with PdfPages('results.pdf') as pdf:
         for q in sorted(m):
-            plt.title('$ q=%d $' % q)
-            plt.xlabel('$ d $')
-            plt.ylabel('nodes')
-            plt.plot(
-                list(m[q].keys()),
-                list(m[q].values()),
-                #'ro'
-                )
+            d = list(m[q].keys())
+            N = [a for a, _ in m[q].values()]
+            T = [a for _, a in m[q].values()]
+            fig, ax1 = plt.subplots()
+            fig.suptitle('$ q=%d $' % q)
+            ax1.plot(d, N, 'b')
+            ax1.set_xlabel('$ d $')
+            ax1.set_ylabel('nodes')
+
+            ax2 = ax1.twinx()
+            ax2.plot(d, T, 'g')
+            ax2.set_ylabel('total scanned')
+
             plt.grid(True)
             pdf.savefig()
             plt.close()
