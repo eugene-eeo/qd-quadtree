@@ -5,11 +5,11 @@ compute:
 	cat points.json | qd/qd > data
 
 plot:
-	cat data | ./plot.py
+	cat data | ./proc/plot.py
 
 run: build compute plot
 
 install:
 	pip install -r requirements.txt
 	go get -u github.com/paulmach/go.geo
-	./genpoints.py > points.json
+	./proc/genpoints.py > points.json
