@@ -56,7 +56,6 @@ func main() {
 	}
 }
 
-
 /*
 func main() {
 	points := []*geo.Point{
@@ -72,14 +71,11 @@ func main() {
 		NewTriangleFromPoints(points[1], points[3], points[4]),
 	}
 	b := BoundFromPoints(points)
-	fmt.Println(b.NorthWest())
-	fmt.Println(b.NorthEast())
-	fmt.Println(b.SouthWest())
-	fmt.Println(b.SouthEast())
-
 	q := NewNode(b, 1)
 	q.AddTriangles(triangles)
 	q.Partition(1, 3)
-	printNode(q)
+	t, ok := q.FindTriangle(&geo.Point{2,2})
+	fmt.Println(t == triangles[0])
+	fmt.Println(ok)
 }
 */

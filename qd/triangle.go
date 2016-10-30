@@ -43,12 +43,10 @@ func (t *Triangle) IsWithin(b *geo.Bound) bool {
 }
 
 func (t *Triangle) ContainsPoint(p *geo.Point) bool {
-	for _, line := range t.lines {
-		if line.Side(p) == -1 { // lies on left
-			return false
-		}
-	}
-	return true
+	b0 := t.lines[0].Side(p) > 0
+	b1 := t.lines[1].Side(p) > 0
+	b2 := t.lines[2].Side(p) > 0
+	return (b0 == b1) && (b1 == b2)
 }
 
 func (t *Triangle) ContainsRange(b *geo.Bound) bool {
