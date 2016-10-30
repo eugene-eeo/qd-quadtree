@@ -46,10 +46,10 @@ func main() {
 	}
 
 	b := BoundFromPoints(ctx.Points)
-	quadtree := NewNode(b, 1)
-	quadtree.Triangles = mesh
-	for _, d := range []int{5, 6, 7, 8, 9, 10, 11, 12} {
-		for _, q := range []int{1, 2, 4, 8, 16, 32, 64, 128} {
+	for _, q := range []int{128, 64, 32, 16, 8, 4, 2, 1} {
+		quadtree := NewNode(b, 1)
+		quadtree.Triangles = mesh
+		for _, d := range []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12} {
 			quadtree.Partition(q, d)
 			fmt.Printf("q=%d d=%d nodes=%d\n", q, d, countNodes(quadtree, 0))
 		}
