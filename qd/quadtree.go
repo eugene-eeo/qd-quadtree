@@ -26,6 +26,9 @@ func (n *Node) Contains(p *geo.Point) bool {
 }
 
 func (n *Node) Split() {
+	if len(n.Children) > 0 {
+		return
+	}
 	X0 := n.Bound.West()
 	X1 := n.Bound.East()
 	Y0 := n.Bound.South()
