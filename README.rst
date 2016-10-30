@@ -3,7 +3,7 @@ qd-quadtree
 
 an experiment to find the best ``q`` and ``d`` factors for quadtree-ifying
 a triangle mesh in order to efficiently determine the bounding triangle.
-See `this link <https://github.com/eugene-eeo/qd-quadtree>`_ for an
+See `this link <https://eugene-eeo.github.io/notes/triangle-mesh.html>`_ for an
 introduction to the ideas behind the algorithm. Run the simulations,
 generate nice graphs::
 
