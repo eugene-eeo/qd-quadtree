@@ -15,6 +15,14 @@ def line_parser(lines):
         yield data
 
 
+legend_opts = {
+    'columnspacing': 1.0,
+    'labelspacing':  0.0,
+    'handletextpad': 0.0,
+    'handlelength':  1.5,
+    }
+
+
 def main():
     m = defaultdict(dict)
     for entry in line_parser(sys.stdin):
@@ -36,14 +44,12 @@ def main():
             for k in d:
                 n, _ = m[q][k]
                 N.append(n)
-            ax.semilogy(d, N, label='$ q = %d $' % q)
+            ax.semilogy(d, N, label='$ q = %d $' % q, marker='o')
 
         for i, line in enumerate(ax.lines):
             line.set_color(colors[i])
 
-        ax.legend(loc='upper left',
-                columnspacing=1.0, labelspacing=0.0,
-                handletextpad=0.0, handlelength=1.5)
+        ax.legend(loc='upper left', **legend_opts)
         plt.grid(True)
         pdf.savefig()
         plt.close()
@@ -58,14 +64,12 @@ def main():
             for k in d:
                 _, n = m[q][k]
                 N.append(n)
-            ax.semilogy(d, N, label='$ q = %d $' % q)
+            ax.semilogy(d, N, label='$ q = %d $' % q, marker='o')
 
         for i, line in enumerate(ax.lines):
             line.set_color(colors[i])
 
-        ax.legend(loc='upper right', ncol=4,
-                columnspacing=1.0, labelspacing=0.0,
-                handletextpad=0.0, handlelength=1.5)
+        ax.legend(loc='upper right', ncol=4, **legend_opts)
         plt.grid(True)
         pdf.savefig()
         plt.close()
