@@ -30,7 +30,7 @@ func line_intersects_bound(l *geo.Line, b *geo.Bound) bool {
 }
 
 func (t *Triangle) IsWithin(b *geo.Bound) bool {
-	// best case: one of the vertexes is in the box.
+	// one of the vertices is in the box.
 	if b.Contains(t.A) || b.Contains(t.B) || b.Contains(t.C) {
 		return true
 	}
@@ -46,6 +46,8 @@ func (t *Triangle) ContainsPoint(p *geo.Point) bool {
 	b0 := t.lines[0].Side(p) > 0
 	b1 := t.lines[1].Side(p) > 0
 	b2 := t.lines[2].Side(p) > 0
+	// test-point can either lie on left or right of the directed
+	// edge, but needs to be consistent.
 	return (b0 == b1) && (b1 == b2)
 }
 

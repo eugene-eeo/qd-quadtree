@@ -4,7 +4,7 @@ import "github.com/paulmach/go.geo"
 import "testing"
 import "math/rand"
 
-func testMain(t *testing.T) {
+func TestMain(t *testing.T) {
 	points := []*geo.Point{
 		&geo.Point{0, 1},
 		&geo.Point{3, 0},
@@ -26,19 +26,22 @@ func testMain(t *testing.T) {
 		x := 3 * rand.Float64()
 		y := 5 * rand.Float64()
 		p := &geo.Point{x, y}
-		var tc *Triangle = nil
+		var correct *Triangle = nil
 		for _, tr := range triangles {
 			if tr.ContainsPoint(p) {
-				tc = tr
+				correct = tr
 				break
 			}
 		}
-		found, _, ok := q.FindTriangle(p)
-		if tc != nil && !ok {
+		triangle, scanned, found := q.FindTriangle(p)
+		if correct != nil && !found {
 			t.Error("expected triangle to be found")
 		}
-		if ok && found != tc {
+		if found && triangle != correct {
 			t.Error("wrong triangle found")
+		}
+		if found && !(scanned >= 1 && scanned <= 3) {
+			t.Error("expected scanned triangles to be >= 1 & <= 3, got", scanned)
 		}
 	}
 }
