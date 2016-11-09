@@ -10,10 +10,10 @@ generate nice graphs::
     $ make install # first time
     $ make run
 
-- generates a 2D mesh
+- generates a 2D mesh with 1000 points
 - partitions the quadtree with the desired qd factors and records the:
 
   - no. of nodes in the tree
-  - total triangles scanned to locate 2000 points
+  - total triangles scanned to locate 2000 random points
 
 - generates subjectively nice graphs

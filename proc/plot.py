@@ -45,7 +45,6 @@ def main():
                 columnspacing=1.0, labelspacing=0.0,
                 handletextpad=0.0, handlelength=1.5)
         plt.grid(True)
-        pdf.savefig()
         plt.close()
 
         fig, ax = plt.subplots()
