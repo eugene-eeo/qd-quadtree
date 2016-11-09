@@ -1,13 +1,13 @@
 build:
 	cd qd && go test && go build
 
-compute:
+compute: build
 	cat points.json | qd/qd > data
 
 plot:
 	cat data | ./proc/plot.py
 
-run: build compute plot
+run: compute plot
 
 install:
 	pip install -r requirements.txt

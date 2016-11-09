@@ -27,7 +27,7 @@ def main():
         colors = [colormap(i) for i in np.linspace(0, 1, num_plots)]
 
         fig, ax = plt.subplots()
-        fig.suptitle('Total Nodes vs $ q $')
+        fig.suptitle('Total nodes vs $ q $')
         ax.set_xlabel('$ d $')
         ax.set_ylabel('total nodes')
 
@@ -45,6 +45,7 @@ def main():
                 columnspacing=1.0, labelspacing=0.0,
                 handletextpad=0.0, handlelength=1.5)
         plt.grid(True)
+        pdf.savefig()
         plt.close()
 
         fig, ax = plt.subplots()

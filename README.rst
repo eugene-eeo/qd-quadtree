@@ -10,7 +10,7 @@ generate nice graphs::
     $ make install # first time
     $ make run
 
-- generates a 2D mesh with 1000 points
+- generates a 2D mesh with 2000 points
 - partitions the quadtree with the desired qd factors and records the:
 
   - no. of nodes in the tree

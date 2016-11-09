@@ -44,7 +44,7 @@ func main() {
 	y0 := b.South()
 	dy := b.North() - y0
 
-	for _, q := range []int{128, 64, 32, 16, 8, 4, 2, 1} {
+	for _, q := range []int{256, 128, 64, 32, 16, 8, 4, 2, 1} {
 		quadtree := NewNode(b, 1)
 		quadtree.Triangles = mesh
 		for _, d := range []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15} {
