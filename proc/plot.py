@@ -15,6 +15,7 @@ def line_parser(lines):
         yield data
 
 
+colormap = plt.cm.gist_ncar
 legend_opts = {
     'columnspacing': 1.0,
     'labelspacing':  0.0,
@@ -23,32 +24,32 @@ legend_opts = {
     }
 
 
+def plotitem(ax, i, data, Qs, Ds, colors):
+    for q in Qs:
+        N = []
+        for d in Ds:
+            N.append(data[q][d][i])
+        ax.semilogy(Ds, N, label='$ q = %d $' % q, marker='o')
+    for i, line in enumerate(ax.lines):
+        line.set_color(colors[i])
+
+
 def main():
     m = defaultdict(dict)
     for entry in line_parser(sys.stdin):
         m[entry['q']][entry['d']] = (entry['nodes'], entry['scanned'])
 
     with PdfPages('results.pdf') as pdf:
-        d = list(m[next(iter(m))].keys())
-        num_plots = len(d)
-        colormap = plt.cm.gist_ncar
+        Q = sorted(m)
+        D = list(m[next(iter(m))].keys())
+        num_plots = len(D)
         colors = [colormap(i) for i in np.linspace(0, 1, num_plots)]
 
         fig, ax = plt.subplots()
         fig.suptitle('Total nodes vs $ q $')
         ax.set_xlabel('$ d $')
         ax.set_ylabel('total nodes')
-
-        for q in sorted(m):
-            N = []
-            for k in d:
-                n, _ = m[q][k]
-                N.append(n)
-            ax.semilogy(d, N, label='$ q = %d $' % q, marker='o')
-
-        for i, line in enumerate(ax.lines):
-            line.set_color(colors[i])
-
+        plotitem(ax, 0, m, Q, D, colors)
         ax.legend(loc='upper left', **legend_opts)
         plt.grid(True)
         pdf.savefig()
@@ -58,17 +59,7 @@ def main():
         fig.suptitle('Total scanned vs $ q $')
         ax.set_xlabel('$ d $')
         ax.set_ylabel('total scanned')
-
-        for q in sorted(m):
-            N = []
-            for k in d:
-                _, n = m[q][k]
-                N.append(n)
-            ax.semilogy(d, N, label='$ q = %d $' % q, marker='o')
-
-        for i, line in enumerate(ax.lines):
-            line.set_color(colors[i])
-
+        plotitem(ax, 1, m, Q, D, colors)
         ax.legend(loc='upper right', ncol=4, **legend_opts)
         plt.grid(True)
         pdf.savefig()
