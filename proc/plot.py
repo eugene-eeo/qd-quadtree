@@ -3,6 +3,7 @@ import sys
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
 from collections import defaultdict
+import numpy as np
 
 
 def line_parser(lines):
@@ -20,25 +21,54 @@ def main():
         m[entry['q']][entry['d']] = (entry['nodes'], entry['scanned'])
 
     with PdfPages('results.pdf') as pdf:
+        d = list(m[next(iter(m))].keys())
+        num_plots = len(d)
+        colormap = plt.cm.gist_ncar
+        colors = [colormap(i) for i in np.linspace(0, 1, num_plots)]
+
+        fig, ax = plt.subplots()
+        fig.suptitle('Total Nodes vs $ q $')
+        ax.set_xlabel('$ d $')
+        ax.set_ylabel('total nodes')
+
         for q in sorted(m):
-            d = list(m[q].keys())
-            N = [a for a, _ in m[q].values()]
-            T = [a for _, a in m[q].values()]
-            fig, ax1 = plt.subplots()
-            fig.suptitle('$ q=%d $' % q)
-            ax1.set_xlabel('$ d $')
-            ax1.set_ylabel('total nodes')
-            ax1.plot(d, N, 'black')
+            N = []
+            for k in d:
+                n, _ = m[q][k]
+                N.append(n)
+            ax.semilogy(d, N, label='$ q = %d $' % q)
 
-            ax2 = ax1.twinx()
-            ax2.plot(d, T, 'g')
-            ax2.set_ylabel('total scanned')
-            for tl in ax2.get_yticklabels():
-                tl.set_color('g')
+        for i, line in enumerate(ax.lines):
+            line.set_color(colors[i])
 
-            plt.grid(True)
-            pdf.savefig()
-            plt.close()
+        ax.legend(loc='upper left',
+                columnspacing=1.0, labelspacing=0.0,
+                handletextpad=0.0, handlelength=1.5)
+        plt.grid(True)
+        pdf.savefig()
+        plt.close()
+
+        fig, ax = plt.subplots()
+        fig.suptitle('Total scanned vs $ q $')
+        ax.set_xlabel('$ d $')
+        ax.set_ylabel('total scanned')
+
+        for q in sorted(m):
+            N = []
+            for k in d:
+                _, n = m[q][k]
+                N.append(n)
+            ax.semilogy(d, N, label='$ q = %d $' % q)
+
+        for i, line in enumerate(ax.lines):
+            line.set_color(colors[i])
+
+        ax.legend(loc='upper right', ncol=4,
+                columnspacing=1.0, labelspacing=0.0,
+                handletextpad=0.0, handlelength=1.5)
+        plt.grid(True)
+        pdf.savefig()
+        plt.close()
 
 
 if __name__ == '__main__':
