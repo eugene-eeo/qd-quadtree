@@ -19,7 +19,7 @@ colormap = plt.cm.gist_ncar
 legend_opts = {
     'columnspacing': 1.0,
     'labelspacing':  0.0,
-    'handletextpad': 0.0,
+    'handletextpad': 0.5,
     'handlelength':  1.5,
     }
 
