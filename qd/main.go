@@ -17,13 +17,13 @@ func countNodes(node *Node, count int) int {
 	return count
 }
 
-type JSONData struct {
+type jsonData struct {
 	Points    []*geo.Point `json:"points"`
 	Simplices [][3]int     `json:"simplices"`
 }
 
 func main() {
-	ctx := new(JSONData)
+	ctx := new(jsonData)
 	mesh := []*Triangle{}
 	source := json.NewDecoder(os.Stdin)
 	if err := source.Decode(&ctx); err != nil {
