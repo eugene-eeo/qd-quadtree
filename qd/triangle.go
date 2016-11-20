@@ -18,7 +18,7 @@ func NewTriangleFromPoints(A, B, C *geo.Point) *Triangle {
 	}
 }
 
-func line_intersects_bound(l *geo.Line, b *geo.Bound) bool {
+func lineIntersectsBound(l *geo.Line, b *geo.Bound) bool {
 	nw := b.NorthWest()
 	ne := b.NorthEast()
 	sw := b.SouthWest()
@@ -35,7 +35,7 @@ func (t *Triangle) IsWithin(b *geo.Bound) bool {
 		return true
 	}
 	for _, line := range t.lines {
-		if line_intersects_bound(line, b) {
+		if lineIntersectsBound(line, b) {
 			return true
 		}
 	}

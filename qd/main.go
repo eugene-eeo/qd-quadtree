@@ -18,8 +18,8 @@ func countNodes(node *Node, count int) int {
 }
 
 type JSONData struct {
-	Points    []*geo.Point
-	Simplices [][3]int
+	Points    []*geo.Point `json:"points"`
+	Simplices [][3]int     `json:"simplices"`
 }
 
 func main() {

@@ -6,17 +6,17 @@ import (
 )
 
 func BoundFromPoints(xs []*geo.Point) *geo.Bound {
-	min_x := xs[0].X()
-	min_y := xs[0].Y()
-	max_x := xs[0].X()
-	max_y := xs[0].Y()
+	minX := xs[0].X()
+	minY := xs[0].Y()
+	maxX := xs[0].X()
+	maxY := xs[0].Y()
 	for _, p := range xs[1:] {
-		min_x = math.Min(min_x, p.X())
-		min_y = math.Min(min_y, p.Y())
-		max_x = math.Max(max_x, p.X())
-		max_y = math.Max(max_y, p.Y())
+		minX = math.Min(minX, p.X())
+		minY = math.Min(minY, p.Y())
+		maxX = math.Max(maxX, p.X())
+		maxY = math.Max(maxY, p.Y())
 	}
-	return geo.NewBound(min_x, max_x, min_y, max_y)
+	return geo.NewBound(minX, maxX, minY, maxY)
 }
 
 func midpoint(a, b float64) float64 {
@@ -56,22 +56,23 @@ func (n *Node) Split() {
 	Y1 := n.Bound.North()
 	XM := midpoint(X0, X1)
 	YM := midpoint(Y0, Y1)
-	next_depth := n.Depth + 1
+	nextDepth := n.Depth + 1
 	n.Children = []*Node{
-		NewNode(geo.NewBound(X0, XM, Y0, YM), next_depth),
-		NewNode(geo.NewBound(XM, X1, Y0, YM), next_depth),
-		NewNode(geo.NewBound(X0, XM, YM, Y1), next_depth),
-		NewNode(geo.NewBound(XM, X1, YM, Y1), next_depth),
+		NewNode(geo.NewBound(X0, XM, Y0, YM), nextDepth),
+		NewNode(geo.NewBound(XM, X1, Y0, YM), nextDepth),
+		NewNode(geo.NewBound(X0, XM, YM, Y1), nextDepth),
+		NewNode(geo.NewBound(XM, X1, YM, Y1), nextDepth),
 	}
 	for _, node := range n.Children {
 		node.AddTriangles(n.Triangles)
 	}
 }
 
-func (node *Node) FindNode(p *geo.Point) (*Node, bool) {
-	if !node.Contains(p) {
+func (n *Node) FindNode(p *geo.Point) (*Node, bool) {
+	if !n.Contains(p) {
 		return nil, false
 	}
+	node := n
 	for {
 		hasChild := false
 		for _, child := range node.Children {
@@ -88,8 +89,8 @@ func (node *Node) FindNode(p *geo.Point) (*Node, bool) {
 	return node, true
 }
 
-func (node *Node) FindTriangle(p *geo.Point) (*Triangle, int, bool) {
-	node, ok := node.FindNode(p)
+func (n *Node) FindTriangle(p *geo.Point) (*Triangle, int, bool) {
+	node, ok := n.FindNode(p)
 	if !ok {
 		return nil, 0, false
 	}
@@ -103,10 +104,10 @@ func (node *Node) FindTriangle(p *geo.Point) (*Triangle, int, bool) {
 	return nil, scanned, false
 }
 
-func (node *Node) Partition(q int, d int) {
-	if len(node.Triangles) > q && node.Depth < d {
-		node.Split()
-		for _, child := range node.Children {
+func (n *Node) Partition(q int, d int) {
+	if len(n.Triangles) > q && n.Depth < d {
+		n.Split()
+		for _, child := range n.Children {
 			child.Partition(q, d)
 		}
 	}
