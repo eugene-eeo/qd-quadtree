@@ -5,7 +5,7 @@ import (
 	"math"
 )
 
-// BoundFromPoints creates a bounding box from the non-empty
+// BoundFromPoints creates a bounding box from a non-empty
 // given slice of points.
 func BoundFromPoints(xs []*geo.Point) *geo.Bound {
 	minX := xs[0].X()
@@ -39,9 +39,9 @@ func NewNode(b *geo.Bound, depth int) *Node {
 	return &Node{Bound: b, Depth: depth}
 }
 
-// AddTriangles adds the given triangles to the Node if and only
-// if either the node's bound is within the triangle or the
-// triangle is within the node's bounds.
+// AddTriangles adds the given triangles to the Node iff either
+// the node's bound is within the triangle or the triangle is
+// within the node's bounds.
 func (n *Node) AddTriangles(t []*Triangle) {
 	for _, triangle := range t {
 		if triangle.IsWithin(n.Bound) || triangle.ContainsBound(n.Bound) {
