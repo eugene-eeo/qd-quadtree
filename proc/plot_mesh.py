@@ -11,6 +11,7 @@ def main():
     Y = [y for x,y in points]
     plt.triplot(X, Y, simplices, color='black')
     plt.plot(X, Y, '.', color='black')
+    plt.axis('off')
     plt.savefig('triangulation.png', dpi=200, bbox_inches='tight')
 
 
